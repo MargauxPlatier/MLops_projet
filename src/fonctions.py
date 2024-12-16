@@ -58,25 +58,21 @@ def final_model_training(X, y):
     final_rf_model.fit(X, y)
     return final_svm_model, final_nb_model, final_rf_model
 
-def evaluate_test_data(test_data_path, final_svm_model, final_nb_model, final_rf_model, encoding):
+def evaluate_test_data(test_data, final_svm_model, final_nb_model, final_rf_model, encoding):
     """Évalue les modèles sur un jeu de test externe"""
-    test_data = pd.read_csv(test_data_path).dropna(axis=1)
     test_X = test_data.iloc[:, :-1]
     test_Y = encoding.transform(test_data.iloc[:, -1])
-    
     svm_preds = final_svm_model.predict(test_X)
     nb_preds = final_nb_model.predict(test_X)
     rf_preds = final_rf_model.predict(test_X)
-
-    final_preds = [stats.mode([i, j, k])[0] for i, j, k in zip(svm_preds, nb_preds, rf_preds)]
-
+    final_preds = [stats.mode([i, j, k])[0][0] for i, j, k in zip(svm_preds, nb_preds, rf_preds)]
     print(f"Accuracy sur l'ensemble des données de test: {accuracy_score(test_Y, final_preds)*100}")
-
     cf_matrix = confusion_matrix(test_Y, final_preds)
-    plt.figure(figsize=(12,8))
+    plt.figure(figsize=(12, 8))
     sns.heatmap(cf_matrix, annot=True)
     plt.title("Matrice de confusion de l'ensemble des données test")
     plt.show()
+
 
 def create_symptom_dict(X):
     """Crée un dictionnaire des symptômes avec leur index"""
