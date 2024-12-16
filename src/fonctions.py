@@ -56,3 +56,10 @@ def final_model_training(X, y):
     final_svm_model.fit(X, y)
     final_nb_model.fit(X, y)
     final_rf_model.fit(X, y)
+    return final_svm_model, final_nb_model, final_rf_model
+
+def evaluate_test_data(test_data_path, final_svm_model, final_nb_model, final_rf_model, encoding):
+    """Évalue les modèles sur un jeu de test externe"""
+    test_data = pd.read_csv(test_data_path).dropna(axis=1)
+    test_X = test_data.iloc[:, :-1]
+    test_Y = encoding.transform(test_data.iloc[:, -1])
