@@ -1,3 +1,8 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+
 def plot_disease_distribution(data):
     """Affiche la distribution des maladies dans les données"""
     count_disease = data["prognosis"].value_counts()
