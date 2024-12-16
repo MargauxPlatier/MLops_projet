@@ -83,3 +83,28 @@ def create_symptom_dict(X):
     symptoms = X.columns.values
     symptom_index = { " ".join([i.capitalize() for i in value.split("_")]): index for index, value in enumerate(symptoms) }
     return symptom_index
+
+def predict_disease(symptoms, symptom_index, rf_model, nb_model, svm_model, predictions_classes):
+    """Prédit la maladie en fonction des symptômes fournis"""
+    symptoms = symptoms.split(",")
+    input_data = [0] * len(symptom_index)
+    
+    for symptom in symptoms:
+        index = symptom_index.get(symptom)
+        if index is not None:
+            input_data[index] = 1
+    
+    input_data = np.array(input_data).reshape(1, -1)
+    rf_prediction = predictions_classes[rf_model.predict(input_data)[0]]
+    nb_prediction = predictions_classes[nb_model.predict(input_data)[0]]
+    svm_prediction = predictions_classes[svm_model.predict(input_data)[0]]
+
+    final_prediction = statistics.mode([rf_prediction, nb_prediction, svm_prediction])
+    
+    return {
+        "rf_model_prediction": rf_prediction,
+        "naive_bayes_prediction": nb_prediction,
+        "svm_model_prediction": svm_prediction,
+        "final_prediction": final_prediction
+    }
+
