@@ -46,3 +46,13 @@ def train_and_evaluate_model(model, X_train, y_train, X_test, y_test):
     sns.heatmap(cf_matrix, annot=True)
     plt.title(f"Matrice de confusion pour {model.__class__.__name__}")
     plt.show()
+
+def final_model_training(X, y):
+    """Entraîne les modèles sur toutes les données disponibles"""
+    final_svm_model = SVC()
+    final_nb_model = GaussianNB()
+    final_rf_model = RandomForestClassifier(random_state=18)
+    
+    final_svm_model.fit(X, y)
+    final_nb_model.fit(X, y)
+    final_rf_model.fit(X, y)
