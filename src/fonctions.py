@@ -32,3 +32,17 @@ def cross_validate_models(models, X, y):
         print(f"Scores: {scores}")
         print(f"Mean Score: {np.mean(scores)}")
 
+def train_and_evaluate_model(model, X_train, y_train, X_test, y_test):
+    """Entraîne un modèle et évalue sa performance"""
+    model.fit(X_train, y_train)
+    preds = model.predict(X_test)
+    accuracy_train = accuracy_score(y_train, model.predict(X_train)) * 100
+    accuracy_test = accuracy_score(y_test, preds) * 100
+    print(f"Accuracy sur les données d'entrainement : {accuracy_train}")
+    print(f"Accuracy sur les données de test : {accuracy_test}")
+    
+    cf_matrix = confusion_matrix(y_test, preds)
+    plt.figure(figsize=(12,8))
+    sns.heatmap(cf_matrix, annot=True)
+    plt.title(f"Matrice de confusion pour {model.__class__.__name__}")
+    plt.show()
